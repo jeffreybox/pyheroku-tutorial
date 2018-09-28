@@ -13,7 +13,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-
 #################################################
 # Database Setup
 #################################################
@@ -29,7 +28,6 @@ Base.prepare(db.engine, reflect=True)
 # Save references to each table
 Samples_Metadata = Base.classes.sample_metadata
 Samples = Base.classes.samples
-
 
 @app.route("/")
 def index():
