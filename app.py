@@ -36,18 +36,16 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
-
 @app.route("/names")
 def names():
     """Return a list of sample names."""
 
-    # Use Pandas to perform the sql query
+    # Use Pandas to perform the sql query  
     stmt = db.session.query(Samples).statement
     df = pd.read_sql_query(stmt, db.session.bind)
 
     # Return a list of the column names (sample names)
     return jsonify(list(df.columns)[2:])
-
 
 @app.route("/metadata/<sample>")
 def sample_metadata(sample):
@@ -78,10 +76,9 @@ def sample_metadata(sample):
     print(sample_metadata)
     return jsonify(sample_metadata)
 
-
 @app.route("/samples/<sample>")
 def samples(sample):
-    """Return `otu_ids`, `otu_labels`,and `sample_values`."""
+    """Data for the gauge"""
     stmt = db.session.query(Samples).statement
     df = pd.read_sql_query(stmt, db.session.bind)
 
@@ -96,6 +93,18 @@ def samples(sample):
     }
     return jsonify(data)
 
+@app.route("/wfreq/<sample>")
+def wfreq(sample):
+    """Return `WFREQ` and `sample_values`."""
+    sel = [Samples_Metadata.WFREQ]
+    results = db.session.query(*sel).filter(Samples_Metadata.sample == sample).all()
+
+    freq_metadata = {}
+    for result in results:
+        freq_metadata["WFREQ"] = result[0]
+
+    print(freq_metadata)
+    return jsonify(freq_metadata)
 
 if __name__ == "__main__":
     app.run()

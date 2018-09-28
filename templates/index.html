@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Flask Plotlyjs Example</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style> .card-text {font-size: 5px !important} </style>
 </head>
 
 <body>
@@ -22,13 +23,20 @@
       <div class="col-md-2">
         <div class="well">
           <h5>SELECT Sample:</h5>
+          
+          <!-- SELECTOR used in init() function-->
           <select id="selDataset" onchange="optionChanged(this.value)"></select>
         </div>
+
+        <!-- panel?-->
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Sample MetaData</h3>
           </div>
+
+          <!-- buildMetadata() function-->
           <div id="sample-metadata" class="panel-body"></div>
+
         </div>
       </div>
       <div class="col-md-5">
