@@ -22,13 +22,14 @@ function buildMetadata(sample) {
 }
 
 function buildCharts(sample) {
+
   console.log(sample);
   var url = `samples/${sample}`;
   var g_url = `wfreq/${sample}`; 
 
   // @TODO: Use `d3.json` to fetch the sample data for the plots
   d3.json(url).then(function(response) {
-    var response = response;
+    //var response = response;
 
     // @TODO: Build a Bubble Chart using the sample data
     var trace1 = [{
@@ -47,7 +48,7 @@ function buildCharts(sample) {
       width: 1350
     };
     var plot1 = document.getElementById('bubble');
-    Plotly.plot(plot1, trace1, layout1)
+    Plotly.newPlot(plot1, trace1, layout1)
 
     // @TODO: Build a Pie Chart
     var trace2 = [{
@@ -56,21 +57,22 @@ function buildCharts(sample) {
       hoverinfo: response.otu_labels.slice(0,10),
       type: "pie"
     }];
+    console.log(trace2)
 
     var layout2 = {
       height: 500,
       width: 500
     };
     var plot2 = document.getElementById('pie');
-    Plotly.plot(plot2, trace2, layout2)
+    Plotly.newPlot(plot2, trace2, layout2)
   });
 
   // @TODO: Build a gauge from a new call
   d3.json(g_url).then(function(response) {
-    var g_response = response;
+    //var g_response = response;
 
     // Enter a speed between 0 and 180
-    var level = g_response.WFREQ*20;
+    var level = response.WFREQ*20;
     console.log(level)
 
     // Trig to calc meter point
@@ -96,7 +98,7 @@ function buildCharts(sample) {
         color:'850000'},
       showlegend: false,
       name: 'freq',
-      text: g_response.WFREQ,
+      text: response.WFREQ,
       hoverinfo: 'text+name'},
 
       { 
@@ -168,6 +170,9 @@ function init() {
 }
 
 function optionChanged(newSample) {
+  // d3.select("pie").html("");
+  // d3.select("gauge").html("");
+  // d3.select("bubble").html("");
   // Fetch new data each time a new sample is selected
   buildCharts(newSample);
   buildMetadata(newSample);
