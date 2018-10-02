@@ -17,7 +17,6 @@ function buildMetadata(sample) {
     Object.entries(data).forEach(([key,value]) => {
       panel.append("card-text").text(`${key}: ${value}`).append("br")
     });
-    // BONUS: Build the Gauge Chart   // buildGauge(data.WFREQ);
   })
 }
 
@@ -27,11 +26,11 @@ function buildCharts(sample) {
   var url = `samples/${sample}`;
   var g_url = `wfreq/${sample}`; 
 
-  // @TODO: Use `d3.json` to fetch the sample data for the plots
+  // Use `d3.json` to fetch the sample data for the plots
   d3.json(url).then(function(response) {
     //var response = response;
 
-    // @TODO: Build a Bubble Chart using the sample data
+    // Build a Bubble Chart using the sample data
     var trace1 = [{
       x: response.otu_ids,
       y: response.sample_values,
@@ -44,13 +43,16 @@ function buildCharts(sample) {
     }];
 
     var layout1 = {
-      height: 500,
-      width: 1350
+      height: 650,
+      width: 1250,
+      title: 'Samples by OTU ID',
+      xaxis: {title: 'OTU ID'},
+      yaxis: {title: 'Samples'}
     };
     var plot1 = document.getElementById('bubble');
     Plotly.newPlot(plot1, trace1, layout1)
 
-    // @TODO: Build a Pie Chart
+    // Build a Pie Chart
     var trace2 = [{
       values: response.sample_values.slice(0,10),
       labels: response.otu_ids.slice(0,10),
@@ -61,13 +63,14 @@ function buildCharts(sample) {
 
     var layout2 = {
       height: 500,
-      width: 500
+      width: 500,
+      title: "First 10 OTUs Sample Proportion"
     };
     var plot2 = document.getElementById('pie');
     Plotly.newPlot(plot2, trace2, layout2)
   });
 
-  // @TODO: Build a gauge from a new call
+  // Build a gauge using a new d3 call
   d3.json(g_url).then(function(response) {
     //var g_response = response;
 
@@ -180,3 +183,11 @@ function optionChanged(newSample) {
 
 // Initialize the dashboard
 init();
+
+// resize charts when window size changes
+function resize(){
+  var rSample = d3.select("#selDataset").property("value");
+  console.log("sample",rSample);
+  buildCharts(rSample);
+}
+d3.select(window).on('resize', resize);

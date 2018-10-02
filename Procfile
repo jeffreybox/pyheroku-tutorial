@@ -1,1 +1,1 @@
-web: gunicorn belly_button:app --preload
+web gunicorn app:app
